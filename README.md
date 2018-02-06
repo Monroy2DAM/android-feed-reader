@@ -6,6 +6,7 @@ Aplicación Android que reproduce podcasts extraídos de RSS's de internet.
 
 Lo mejor es clonar el proyecto mediante New -> Proyect from version control -> GitHub.
 Seguimos los pasos que aparecen y después accedemos a todas las operaciones git en la pestaña VCS.
+
 También puedes mirar este [tutorial](https://androidstudiofaqs.com/tutoriales/como-usar-git-en-android-studio)
 
 ## ¿Cómo puedo colaborar?
@@ -29,3 +30,4 @@ Las siguientes opciones pueden solucionarlo:
 ### "Please select SDK"
 
 No hemos encontrado una solución >.<
+
