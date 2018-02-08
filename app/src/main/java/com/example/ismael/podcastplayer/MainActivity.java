@@ -7,16 +7,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.example.ismael.listapodcast.R;
+import com.example.ismael.podcastplayer.modelo.AdaptadorLista;
+import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
+import com.example.ismael.podcastplayer.modelo.Podcasts;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 // FIXME Lee el archivo readme para encontrar fallos típicos.
 // TODO En la página GitHub -> Issues (-> Milestones) puedes tareas por hacer.
 
 public class MainActivity extends AppCompatActivity {
+
+    public static final String[] NOMBRES_RSS = {
+            "Play Rugby",
+            "Oh My LOL"
+    };
 
     // Podría haber que adaptar la clase Podcast para distintos rss
     public static final String[] LISTA_RSS = {
@@ -25,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private ListView lista;
+    private Spinner spinner;
     private AdaptadorLista adaptador;
     private Podcasts podcasts;
+    private ProcesarRss procesadorRss;
 
     /* -------------------- OnCreate -------------------- */
 
@@ -37,10 +51,26 @@ public class MainActivity extends AppCompatActivity {
 
         // Asociamos elementos con la vista
         lista = findViewById(R.id.lista);
+        spinner = findViewById(R.id.spinner);
 
-        // Creamos hilo que procesará los datos. Enlace al xml
-        ProcesarRss procesadorRss = new ProcesarRss();
-        procesadorRss.execute(LISTA_RSS[1]);
+        inicializarSpinner();
+
+        /* -------------------- Eventos -------------------- */
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Creamos hilo que procesará los datos. Enlace al xml
+                //procesadorRss.cancel(true);
+                procesadorRss = new ProcesarRss();
+                procesadorRss.execute(LISTA_RSS[ (int)id ]);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         // OnClick en la lista
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,6 +91,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
+    }
+
+    private void inicializarSpinner(){
+        ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<ElementoSpinner>();
+        for(int i = 0; i < NOMBRES_RSS.length; i++){ elementosSpinner.add(new ElementoSpinner(i, "Podcast", NOMBRES_RSS[i])); }
+        ArrayAdapter<ElementoSpinner> adaptadorSpinner = new ArrayAdapter<ElementoSpinner>(this, R.layout.support_simple_spinner_dropdown_item, elementosSpinner);
+        adaptadorSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adaptadorSpinner);
     }
 
     /* -------------------- AsyncTask -------------------- */

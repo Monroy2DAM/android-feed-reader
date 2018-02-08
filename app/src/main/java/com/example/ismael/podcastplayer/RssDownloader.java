@@ -1,5 +1,7 @@
 package com.example.ismael.podcastplayer;
 
+import com.example.ismael.podcastplayer.modelo.Podcasts;
+
 import java.io.IOException;
 import java.io.InputStream;
 

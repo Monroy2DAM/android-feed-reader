@@ -1,5 +1,7 @@
 package com.example.ismael.podcastplayer;
 
+import com.example.ismael.podcastplayer.modelo.Podcast;
+
 import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
