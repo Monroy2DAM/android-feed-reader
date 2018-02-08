@@ -1,6 +1,5 @@
 package com.example.ismael.podcastplayer;
 
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.ismael.listapodcast.R;
 import com.example.ismael.podcastplayer.modelo.AdaptadorLista;
@@ -25,12 +25,12 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    // TODO cuidado con que varíe las etiquetas xml del podcast
     public static final String[] NOMBRES_RSS = {
             "Play Rugby",
             "Oh My LOL"
     };
 
-    // Podría haber que adaptar la clase Podcast para distintos rss
     public static final String[] LISTA_RSS = {
             "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml",
             "https://recursosweb.prisaradio.com/podcasts/571.xml"
@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinner;
     private AdaptadorLista adaptador;
     private Podcasts podcasts;
+
+    private static MediaPlayer reproduccion;
     private ProcesarRss procesadorRss;
 
     /* -------------------- OnCreate -------------------- */
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinner);
 
         inicializarSpinner();
+
+        reproduccion = new MediaPlayer();
 
         /* -------------------- Eventos -------------------- */
 
@@ -76,22 +80,28 @@ public class MainActivity extends AppCompatActivity {
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String url = podcasts.get(i).getGuid();
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+                // Mírate: https://developer.android.com/reference/android/media/MediaPlayer.html
+                if(reproduccion.isPlaying())
+                    reproduccion.reset();
+
 
                 // Reproducimos audio
+                String url = podcasts.get(i).getGuid();
                 try {
-                    mediaPlayer.setDataSource(url);
-                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                    mediaPlayer.start();
+                    reproduccion.setDataSource(url);
+                    reproduccion.prepare(); // Aquí carga el audio, puede tardar
+                    reproduccion.start();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    reproduccion.stop();
+                    Toast.makeText(MainActivity.this, "Error de reproducción:\n" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
         
     }
+
+    /* ================================= Métodos ================================= */
 
     private void inicializarSpinner(){
         ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<ElementoSpinner>();
