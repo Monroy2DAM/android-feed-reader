@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Clase de catálogo de Podcasts
  */
 
-public class Podcasts {
+public class Podcasts extends ColeccionGenerica<Podcast>{
 
     private ArrayList<Podcast> listaPodcasts;
 
@@ -19,14 +19,17 @@ public class Podcasts {
 
     /* -------------------- Getter & Setter -------------------- */
 
-    public void add(Podcast podcast){
-        listaPodcasts.add(podcast);
+    @Override
+    public <T> void add(T podcast){
+        listaPodcasts.add((Podcast)podcast);
     }
 
+    @Override
     public Podcast get(int index){
-        return listaPodcasts.get(index);
+        return (Podcast) listaPodcasts.get(index);
     }
 
+    @Override
     public int size(){
         return listaPodcasts.size();
     }

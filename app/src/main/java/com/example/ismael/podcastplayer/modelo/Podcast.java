@@ -5,7 +5,7 @@ package com.example.ismael.podcastplayer.modelo;
  * Clase que define los datos de un Podcast
  */
 
-public class Podcast {
+public class Podcast extends ElementoGenerico{
 
     private String imagen, titulo, guid, duracion, fecha;
 
@@ -29,6 +29,7 @@ public class Podcast {
 
     public void setImagen(String imagen) { this.imagen = imagen; }
 
+    @Override
     public String getTitulo() {
         return titulo;
     }
@@ -55,5 +56,10 @@ public class Podcast {
 
     public void setFecha(String fecha) {
         this.fecha = fecha;
+    }
+
+    @Override
+    public String getUrlStream() {
+        return getGuid();
     }
 }

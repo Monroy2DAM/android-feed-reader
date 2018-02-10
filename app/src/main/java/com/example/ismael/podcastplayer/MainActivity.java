@@ -12,37 +12,45 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ismael.listapodcast.R;
-import com.example.ismael.podcastplayer.modelo.AdaptadorLista;
+import com.example.ismael.podcastplayer.modelo.Canciones;
+import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
+import com.example.ismael.podcastplayer.modelo.ListViewAdapterPodcast;
+import com.example.ismael.podcastplayer.modelo.Cancion;
 import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
 import com.example.ismael.podcastplayer.modelo.Podcasts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 // FIXME Lee el archivo readme para encontrar fallos típicos.
 // TODO En la página GitHub -> Issues (-> Milestones) puedes tareas por hacer.
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO cuidado con que varíe las etiquetas xml del podcast
-    public static final String[] NOMBRES_RSS = {
-            "Play Rugby",
-            "Oh My LOL"
-    };
+    /**
+     * TODO Clase colección de elementos del que extienda Podcasts y Canciones
+     * Métodos comunes: getGuid
+     */
 
-    public static final String[] LISTA_RSS = {
-            "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml",
-            "https://recursosweb.prisaradio.com/podcasts/571.xml"
+    /* TODO Cuidado! El primer campo debe ser el tipo "Podcast" o "Lista" */
+    public static final ElementoSpinner[] fuentes = {
+            new ElementoSpinner("Podcast", "Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
+            new ElementoSpinner("Podcast", "Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
+            new ElementoSpinner("Lista", "Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u")
     };
 
     private ListView lista;
     private Spinner spinner;
-    private AdaptadorLista adaptador;
-    private Podcasts podcasts;
+    private ListViewAdapterPodcast adaptador;
+
+    private ColeccionGenerica coleccion;
 
     private static MediaPlayer reproduccion;
     private ProcesarRss procesadorRss;
+
+    private String[] parametrosTask;
 
     /* -------------------- OnCreate -------------------- */
 
@@ -64,10 +72,11 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // Creamos hilo que procesará los datos. Enlace al xml
-                //procesadorRss.cancel(true);
+                // Creamos hilo que procesará los datos. Le pasamos el tipo de Podcast o lista y su enlace
                 procesadorRss = new ProcesarRss();
-                procesadorRss.execute(LISTA_RSS[ (int)id ]);
+                parametrosTask[0] = fuentes[(int)id].getTipo();
+                parametrosTask[1] = fuentes[(int)id].getUrl();
+                procesadorRss = new ProcesarRss();
             }
 
             @Override
@@ -87,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // Reproducimos audio
-                String url = podcasts.get(i).getGuid();
+                String url = coleccion.get(i).getUrlStream();
                 try {
                     reproduccion.setDataSource(url);
                     reproduccion.prepare(); // Aquí carga el audio, puede tardar
@@ -101,11 +110,11 @@ public class MainActivity extends AppCompatActivity {
         
     }
 
-    /* ================================= Métodos ================================= */
+    /* ============================ Métodos e hilo reproductor ============================ */
 
     private void inicializarSpinner(){
-        ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<ElementoSpinner>();
-        for(int i = 0; i < NOMBRES_RSS.length; i++){ elementosSpinner.add(new ElementoSpinner(i, "Podcast", NOMBRES_RSS[i])); }
+        ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<>(Arrays.asList(fuentes));
+
         ArrayAdapter<ElementoSpinner> adaptadorSpinner = new ArrayAdapter<ElementoSpinner>(this, R.layout.support_simple_spinner_dropdown_item, elementosSpinner);
         adaptadorSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adaptadorSpinner);
@@ -120,15 +129,21 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Procesamos los datos de internet
-         * @param params viene a ser la url del RSS (la que viene del .execute)
+         * @param params viene a ser el tipo de fuente y la url
          * @return
          */
         protected Boolean doInBackground(String... params) {
 
-            RssDownloader saxparser =
-                    new RssDownloader(params[0]);
+            if (parametrosTask[0].equals("Podcast")) {
+                RssDownloader saxparser = new RssDownloader(parametrosTask[1]);
+                coleccion = saxparser.parse();
+            }else
+                if(parametrosTask[0].equals("Lista")){
+                    LoaderM3U m3uLoader = new LoaderM3U(parametrosTask[1]);
+                    coleccion = m3uLoader.getCanciones();
+                }
 
-            podcasts = saxparser.parse();
+
 
             return true;
         }
@@ -140,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
-            adaptador = new AdaptadorLista(MainActivity.this, podcasts);
+            adaptador = new ListViewAdapterPodcast(MainActivity.this, coleccion);
             lista.setAdapter(adaptador);
 
         }

@@ -8,11 +8,19 @@ public class ElementoSpinner {
     private int id;
     private String tipo;
     private String nombre;
+    private String url;
 
-    public ElementoSpinner(int id, String tipo, String nombre) {
+    public ElementoSpinner(String tipo, String nombre, String url) {
+        this.tipo = tipo;
+        this.nombre = nombre;
+        this.url = url;
+    }
+
+    public ElementoSpinner(int id, String tipo, String nombre, String url) {
         this.id = id;
         this.tipo = tipo;
         this.nombre = nombre;
+        this.url = url;
     }
 
     public int getId() {
@@ -33,6 +41,13 @@ public class ElementoSpinner {
 
     public String getTipo() {
         return tipo;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
