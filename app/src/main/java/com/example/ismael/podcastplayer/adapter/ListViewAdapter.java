@@ -16,14 +16,16 @@ import com.example.ismael.podcastplayer.modelo.Podcast;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by Ismael on 14/01/2018.
  * Clase que llena la lista mostrada en pantalla
+ * Created by Ismael on 14/01/2018.
  */
 public class ListViewAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private Context context;
+
     private ColeccionGenerica coleccion;
+
     private TextView titulo, duracion, fecha;
     private ImageView imagen;
 
@@ -69,8 +71,10 @@ public class ListViewAdapter extends BaseAdapter {
         duracion = convertView.findViewById(R.id.duracion);
         fecha = convertView.findViewById(R.id.fecha);
 
+        // Aquí mostramos los parámetros generales
         titulo.setText(elemento.getTitulo());
 
+        // Aquí mostramos la información adicional si es un Podcast
         if(elemento.getClass().getSimpleName().equals("Podcast")) {
             // Cargamos datos en la vista
             Picasso.with(context)
