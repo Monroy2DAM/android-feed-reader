@@ -11,6 +11,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Clase que lee xml y crea una lista de Podcasts
  */
+@Deprecated
 public class SaxHandler1 extends DefaultHandler {
 
     private ArrayList<Podcast> listaPodcasts;
@@ -54,7 +55,7 @@ public class SaxHandler1 extends DefaultHandler {
             if (localName.equals("title")) {
                 podcastActual.setTitulo(sbTexto.toString().substring(0));
            } else if (localName.equals("guid")) {
-                podcastActual.setGuid(sbTexto.toString().trim());
+                podcastActual.setUrlMp3(sbTexto.toString().trim());
             } else if (localName.equals("duration")) {
                 podcastActual.setDuracion(sbTexto.toString().trim());
             } else if (localName.equals("pubDate")) {

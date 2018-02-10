@@ -7,16 +7,16 @@ package com.example.ismael.podcastplayer.modelo;
 
 public class Podcast extends ElementoGenerico{
 
-    private String imagen, titulo, guid, duracion, fecha;
+    private String imagen, titulo, urlMp3, duracion, fecha;
 
     /* -------------------- Constructor -------------------- */
 
     public Podcast() { }
 
-    public Podcast(String imagen, String titulo, String guid, String duracion, String fecha) {
+    public Podcast(String imagen, String titulo, String urlMp3, String duracion, String fecha) {
         this.imagen = imagen;
         this.titulo = titulo;
-        this.guid = guid;
+        this.urlMp3 = urlMp3;
         this.duracion = duracion;
         this.fecha = fecha;
     }
@@ -38,9 +38,9 @@ public class Podcast extends ElementoGenerico{
         this.titulo = titulo;
     }
 
-    public String getGuid() { return guid; }
+    public String getUrlMp3() { return urlMp3; }
 
-    public void setGuid(String guid) { this.guid = guid; }
+    public void setUrlMp3(String urlMp3) { this.urlMp3 = urlMp3; }
 
     public String getDuracion() {
         return duracion;
@@ -60,6 +60,6 @@ public class Podcast extends ElementoGenerico{
 
     @Override
     public String getUrlStream() {
-        return getGuid();
+        return getUrlMp3();
     }
 }

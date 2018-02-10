@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.ismael.listapodcast.R;
 import com.example.ismael.podcastplayer.adapter.LoaderM3U;
-import com.example.ismael.podcastplayer.adapter.SaxParser1;
+import com.example.ismael.podcastplayer.adapter.SaxParser;
 import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
 import com.example.ismael.podcastplayer.adapter.ListViewAdapter;
 import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
@@ -22,13 +22,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// FIXME Lee el archivo readme para encontrar fallos típicos.
+// TODO Lee el archivo readme para encontrar solución a errores típicos.
 // TODO En la página GitHub -> Issues (-> Milestones) puedes tareas por hacer.
 
 public class MainActivity extends AppCompatActivity {
 
     /* TODO Añadir aquí los podcasts con nombre y enlace */
     public static final ElementoSpinner[] fuentes = {
+            new ElementoSpinner("Palabra de hacker", "http://www.ivoox.com/palabra-hacker_fg_f1266057_filtro_1.xml"),
             new ElementoSpinner("Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
             new ElementoSpinner("Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
             new ElementoSpinner("OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private ListViewAdapter adaptador;
     private Spinner spinner;
 
-    private ColeccionGenerica coleccion;
+    /* Colección de tipo genérico (podría convertirse en Canciones o Podcasts) */
+    private ColeccionGenerica coleccionGenerica;
 
     private static MediaPlayer reproduccion;
 
@@ -80,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // Mírate: https://developer.android.com/reference/android/media/MediaPlayer.html
+                // Para impedir que se reproduzcan múltiples streams
                 if(reproduccion.isPlaying())
                     reproduccion.reset();
 
-
                 // Reproducimos audio
-                String url = coleccion.get(i).getUrlStream();
+                String url = coleccionGenerica.get(i).getUrlStream();
                 try {
                     reproduccion.setDataSource(url);
                     reproduccion.prepare(); // Aquí carga el audio, puede tardar
@@ -101,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
     /* ============================ Métodos e hilo reproductor ============================ */
 
+    // TODO podríamos hacer que el spinner obtuviera los podcasts de un fichero de texto
     private void inicializarSpinner(){
         ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<>(Arrays.asList(fuentes));
 
@@ -124,12 +127,13 @@ public class MainActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
 
             if (params[0].trim().equals("Podcast")) {
-                SaxParser1 saxparser = new SaxParser1(params[1]);
-                coleccion = saxparser.parse();
+                // Con el viejo sax: coleccionGenerica = new SaxParser1(params[1]).parse();
+                SaxParser xmlParser = new SaxParser(params[1]);
+                coleccionGenerica = xmlParser.parse();
             }else
                 if(params[0].trim().equals("Lista")){
                     LoaderM3U m3uLoader = new LoaderM3U(params[1]);
-                    coleccion = m3uLoader.getCanciones();
+                    coleccionGenerica = m3uLoader.getCanciones();
                 }
             return true;
         }
@@ -141,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
-            adaptador = new ListViewAdapter(MainActivity.this, coleccion);
+            adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
             lista.setAdapter(adaptador);
 
         }
