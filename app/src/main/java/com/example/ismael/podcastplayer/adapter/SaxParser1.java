@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer;
+package com.example.ismael.podcastplayer.adapter;
 
 import com.example.ismael.podcastplayer.modelo.Podcasts;
 
@@ -13,13 +13,13 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * Clase que recoge los datos de Internet y obtiene el catálogo de Podcasts basándose en un handler
  */
-public class RssDownloader {
+public class SaxParser1 {
 
     private URL rssUrl;
 
 	/* -------------------- Constructor -------------------- */
 
-    public RssDownloader(String url) {
+    public SaxParser1(String url) {
         try {
             this.rssUrl = new URL(url);
         }
@@ -40,7 +40,7 @@ public class RssDownloader {
 
             // Creamos parser (viene en SAX) y manejador (interpretador del xml hecho por nosotros)
             SAXParser parser = factory.newSAXParser();
-            SaxParser handler = new SaxParser();
+            SaxHandler1 handler = new SaxHandler1();
 
             // Parseamos el stream de datos según nuestro manejador (el sax)
             parser.parse(this.getInputStream(), handler);
