@@ -10,10 +10,18 @@ public class ElementoSpinner {
     private String nombre;
     private String url;
 
-    public ElementoSpinner(String tipo, String nombre, String url) {
-        this.tipo = tipo;
+    public ElementoSpinner(String nombre, String url) {
         this.nombre = nombre;
         this.url = url;
+
+        String extension = url.substring(url.length()-3);
+        if( extension.equals("m3u") )
+            tipo = "Lista";
+        else
+            if(extension.equals("xml") || extension.equals("rss"))
+                tipo = "Podcast";
+            else
+                tipo = "Lista";
     }
 
     public ElementoSpinner(int id, String tipo, String nombre, String url) {

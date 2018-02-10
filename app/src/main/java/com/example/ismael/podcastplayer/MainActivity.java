@@ -27,12 +27,12 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    /* TODO Cuidado! El primer campo debe ser el tipo "Podcast" o "Lista" */
+    /* TODO Añadir aquí los podcasts con nombre y enlace */
     public static final ElementoSpinner[] fuentes = {
-            new ElementoSpinner("Podcast", "Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
-            new ElementoSpinner("Podcast", "Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
-            new ElementoSpinner("Podcast", "OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
-            new ElementoSpinner("Lista", "Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u")
+            new ElementoSpinner("Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
+            new ElementoSpinner("Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
+            new ElementoSpinner("OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
+            new ElementoSpinner("Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u")
     };
 
     private ListView lista;
