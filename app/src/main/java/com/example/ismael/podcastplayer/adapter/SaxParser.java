@@ -22,7 +22,7 @@ import java.net.URL;
  * @author Francisco Rodríguez García
  */
 public class SaxParser {
-    // TODO mira
+    // TODO mira el FIXME de más abajo para indicaciones de fallos de la aplicacion
 
     //==============================================================================================
     // ATRIBUTOS

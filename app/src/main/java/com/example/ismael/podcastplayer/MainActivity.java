@@ -1,5 +1,6 @@
 package com.example.ismael.podcastplayer;
 
+import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
     /* Colección de tipo genérico (podría convertirse en Canciones o Podcasts) */
     private ColeccionGenerica coleccionGenerica;
 
-    private static MediaPlayer reproduccion;
+    private MediaPlayer reproduccion;
+    private ProgressDialog progresoCircular;
 
     /* -------------------- OnCreate -------------------- */
 
@@ -58,9 +60,18 @@ public class MainActivity extends AppCompatActivity {
 
         inicializarSpinner();
 
+        configurarProgresoCircular();
         reproduccion = new MediaPlayer();
 
         /* -------------------- Eventos -------------------- */
+
+        reproduccion.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                if(progresoCircular.isShowing())
+                    progresoCircular.dismiss();
+            }
+        });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -81,21 +92,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                // Mírate: https://developer.android.com/reference/android/media/MediaPlayer.html
-                // Para impedir que se reproduzcan múltiples streams
-                if(reproduccion.isPlaying())
-                    reproduccion.reset();
+                reproducirNuevoStream( coleccionGenerica.get(i).getUrlStream() );
 
-                // Reproducimos audio
-                String url = coleccionGenerica.get(i).getUrlStream();
-                try {
-                    reproduccion.setDataSource(url);
-                    reproduccion.prepare(); // Aquí carga el audio, puede tardar
-                    reproduccion.start();
-                } catch (IOException e) {
-                    reproduccion.stop();
-                    Toast.makeText(MainActivity.this, "Error de reproducción:\n" + e.getMessage(), Toast.LENGTH_LONG).show();
-                }
             }
         });
         
@@ -112,12 +110,50 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adaptadorSpinner);
     }
 
+    /** Inicializa la animación de progreso de carga */
+    private void configurarProgresoCircular(){
+        progresoCircular = new ProgressDialog(this);
+        progresoCircular.setMessage("Procesando...");
+        progresoCircular.setCancelable(true);
+    }
+
+    /** Reproduce un nuevo Stream si es posible */
+    private void reproducirNuevoStream(String url){
+        // Mírate: https://developer.android.com/reference/android/media/MediaPlayer.html
+        progresoCircular.setMessage("Cargando Stream");
+        progresoCircular.show();
+
+        // Para impedir que se reproduzcan múltiples streams
+        if(reproduccion.isPlaying())
+            reproduccion.reset();
+
+        // Reproducimos audio si es posible
+        try {
+            reproduccion.setDataSource(url);
+
+            reproduccion.prepare(); // Aquí carga el audio, puede tardar
+            reproduccion.start();
+
+        } catch (IOException e) {
+            if(progresoCircular.isShowing())
+                progresoCircular.dismiss();
+            reproduccion.reset();
+            Toast.makeText(MainActivity.this, "Error de reproducción:\n" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
     /* -------------------- AsyncTask -------------------- */
 
     /**
      * Hilo que interpretará los datos de internet y llenará la lista
      */
     private class HiloProcesador extends AsyncTask<String,Integer,Boolean> {
+
+        /** Ejecutado antes de lanzar el hilo */
+        @Override
+        protected void onPreExecute() {
+            progresoCircular.show();
+        }
 
         /**
          * Procesamos los datos de internet
@@ -147,7 +183,8 @@ public class MainActivity extends AppCompatActivity {
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
             adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
             lista.setAdapter(adaptador);
-
+            if(progresoCircular.isShowing())
+                progresoCircular.dismiss();
         }
     }
 
