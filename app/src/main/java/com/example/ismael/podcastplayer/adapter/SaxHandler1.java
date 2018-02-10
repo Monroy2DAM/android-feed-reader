@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer;
+package com.example.ismael.podcastplayer.adapter;
 
 import com.example.ismael.podcastplayer.modelo.Podcast;
 
@@ -11,7 +11,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * Clase que lee xml y crea una lista de Podcasts
  */
-public class SaxParser extends DefaultHandler {
+public class SaxHandler1 extends DefaultHandler {
 
     private ArrayList<Podcast> listaPodcasts;
     private Podcast podcastActual;
@@ -52,12 +52,13 @@ public class SaxParser extends DefaultHandler {
         if (this.podcastActual != null) {
 
             if (localName.equals("title")) {
-                podcastActual.setTitulo(sbTexto.toString().substring(0, sbTexto.length()-13).trim());
+                podcastActual.setTitulo(sbTexto.toString().substring(0));
            } else if (localName.equals("guid")) {
                 podcastActual.setGuid(sbTexto.toString().trim());
             } else if (localName.equals("duration")) {
                 podcastActual.setDuracion(sbTexto.toString().trim());
             } else if (localName.equals("pubDate")) {
+                // FIXME Cuidado con el formato de fecha que traiga
                 podcastActual.setFecha(sbTexto.toString().substring(0, sbTexto.length()-6).trim());
             } else if (localName.equals("item")) {
                 listaPodcasts.add(podcastActual);

@@ -12,45 +12,36 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ismael.listapodcast.R;
-import com.example.ismael.podcastplayer.modelo.Canciones;
+import com.example.ismael.podcastplayer.adapter.LoaderM3U;
+import com.example.ismael.podcastplayer.adapter.SaxParser1;
 import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
-import com.example.ismael.podcastplayer.modelo.ListViewAdapterPodcast;
-import com.example.ismael.podcastplayer.modelo.Cancion;
+import com.example.ismael.podcastplayer.adapter.ListViewAdapter;
 import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
-import com.example.ismael.podcastplayer.modelo.Podcasts;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 // FIXME Lee el archivo readme para encontrar fallos típicos.
 // TODO En la página GitHub -> Issues (-> Milestones) puedes tareas por hacer.
 
 public class MainActivity extends AppCompatActivity {
 
-    /**
-     * TODO Clase colección de elementos del que extienda Podcasts y Canciones
-     * Métodos comunes: getGuid
-     */
-
     /* TODO Cuidado! El primer campo debe ser el tipo "Podcast" o "Lista" */
     public static final ElementoSpinner[] fuentes = {
             new ElementoSpinner("Podcast", "Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
             new ElementoSpinner("Podcast", "Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
+            new ElementoSpinner("Podcast", "OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
             new ElementoSpinner("Lista", "Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u")
     };
 
     private ListView lista;
+    private ListViewAdapter adaptador;
     private Spinner spinner;
-    private ListViewAdapterPodcast adaptador;
 
     private ColeccionGenerica coleccion;
 
     private static MediaPlayer reproduccion;
-    private ProcesarRss procesadorRss;
-
-    private String[] parametrosTask;
 
     /* -------------------- OnCreate -------------------- */
 
@@ -73,10 +64,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Creamos hilo que procesará los datos. Le pasamos el tipo de Podcast o lista y su enlace
-                procesadorRss = new ProcesarRss();
-                parametrosTask[0] = fuentes[(int)id].getTipo();
-                parametrosTask[1] = fuentes[(int)id].getUrl();
-                procesadorRss = new ProcesarRss();
+                HiloProcesador procesadorRss = new HiloProcesador();
+                procesadorRss.execute(fuentes[(int)id].getTipo(), fuentes[(int)id].getUrl());
             }
 
             @Override
@@ -125,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Hilo que interpretará los datos de internet y llenará la lista
      */
-    private class ProcesarRss extends AsyncTask<String,Integer,Boolean> {
+    private class HiloProcesador extends AsyncTask<String,Integer,Boolean> {
 
         /**
          * Procesamos los datos de internet
@@ -134,17 +123,14 @@ public class MainActivity extends AppCompatActivity {
          */
         protected Boolean doInBackground(String... params) {
 
-            if (parametrosTask[0].equals("Podcast")) {
-                RssDownloader saxparser = new RssDownloader(parametrosTask[1]);
+            if (params[0].trim().equals("Podcast")) {
+                SaxParser1 saxparser = new SaxParser1(params[1]);
                 coleccion = saxparser.parse();
             }else
-                if(parametrosTask[0].equals("Lista")){
-                    LoaderM3U m3uLoader = new LoaderM3U(parametrosTask[1]);
+                if(params[0].trim().equals("Lista")){
+                    LoaderM3U m3uLoader = new LoaderM3U(params[1]);
                     coleccion = m3uLoader.getCanciones();
                 }
-
-
-
             return true;
         }
 
@@ -155,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
-            adaptador = new ListViewAdapterPodcast(MainActivity.this, coleccion);
+            adaptador = new ListViewAdapter(MainActivity.this, coleccion);
             lista.setAdapter(adaptador);
 
         }

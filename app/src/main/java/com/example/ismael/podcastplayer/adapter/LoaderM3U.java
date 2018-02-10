@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer;
+package com.example.ismael.podcastplayer.adapter;
 
 import com.example.ismael.podcastplayer.modelo.Cancion;
 import com.example.ismael.podcastplayer.modelo.Canciones;
