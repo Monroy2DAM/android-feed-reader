@@ -1,11 +1,13 @@
 package com.example.ismael.podcastplayer.modelo;
 
 /**
+ * Elementos del spinner del principal. Estaría bien fusionarlo con ElementoGenerico
  * Created by Ismael on 08/02/2018.
  */
 public class ElementoSpinner {
 
     private int id;
+    /* Usado por el AsyncTask para saber si es Podcast o Cancion */
     private String tipo;
     private String nombre;
     private String url;

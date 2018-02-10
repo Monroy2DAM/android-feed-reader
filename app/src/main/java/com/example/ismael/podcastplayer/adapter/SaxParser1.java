@@ -13,6 +13,7 @@ import javax.xml.parsers.SAXParserFactory;
 /**
  * Clase que recoge los datos de Internet y obtiene el catálogo de Podcasts basándose en un handler
  */
+@Deprecated
 public class SaxParser1 {
 
     private URL rssUrl;

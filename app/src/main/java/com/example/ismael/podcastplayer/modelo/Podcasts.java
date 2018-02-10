@@ -13,6 +13,7 @@ public class Podcasts extends ColeccionGenerica<Podcast>{
 
     /* -------------------- Constructor -------------------- */
 
+    public Podcasts(){ listaPodcasts = new ArrayList<Podcast>(); }
     public Podcasts(ArrayList<Podcast> listaPodcasts) {
         this.listaPodcasts = listaPodcasts;
     }

@@ -3,6 +3,7 @@ package com.example.ismael.podcastplayer.modelo;
 import java.util.List;
 
 /**
+ *
  * Created by Ismael on 10/02/2018.
  */
 
