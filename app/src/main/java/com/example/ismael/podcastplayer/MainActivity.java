@@ -15,19 +15,23 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.ismael.listapodcast.R;
-import com.example.ismael.podcastplayer.adapter.LoaderM3U;
-import com.example.ismael.podcastplayer.adapter.SaxParser;
+import com.example.ismael.podcastplayer.adaptadores.LoaderM3U;
+import com.example.ismael.podcastplayer.adaptadores.SaxParser;
 import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
-import com.example.ismael.podcastplayer.adapter.ListViewAdapter;
+import com.example.ismael.podcastplayer.adaptadores.ListViewAdapter;
 import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// TODO Lee el archivo readme para encontrar solución a errores típicos.
-// TODO En la página GitHub -> Issues (-> Milestones) puedes tareas por hacer.
-
+/*
+ +======================= ANDROID PODCASTS PLAYER ======================+
+ | Reproductor de RSS's remotos colaborativo. Podrás:                   |
+ | Participar, sugerir, documentarte, solucionar errores y más en...    |
+ | -------> https://github.com/ismenc/android-podcasts-player <-------  |
+ +======================================================================+
+ */
 public class MainActivity extends AppCompatActivity {
 
     /* TODO Añadir aquí los podcasts con nombre y enlace */
@@ -40,17 +44,15 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private ListView lista;
-    private ListViewAdapter adaptador;
     private Spinner spinner;
 
     /* Colección de tipo genérico (podría convertirse en Canciones o Podcasts) */
     private ColeccionGenerica coleccionGenerica;
 
-
     private MediaPlayer reproduccion;
     private ProgressDialog progresoCircular;
 
-    /* -------------------- OnCreate -------------------- */
+    /* ============================ OnCreate ============================ */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* -------------------- Eventos -------------------- */
 
-        reproduccion.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                if(progresoCircular.isShowing())
-                    progresoCircular.dismiss();
-            }
-        });
-
+        /** Cuando Seleccionamos otro RSS */
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -90,23 +85,32 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /** OnClick en el ListView */
+        /** Click en el ListView */
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 reproducirNuevoStream( coleccionGenerica.get(i).getUrlStream() );
             }
         });
-        
+
+        /** Cuando un sonido ha terminado de bufferearse */
+        reproduccion.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                // Cerramos la animación de carga
+                if(progresoCircular.isShowing())
+                    progresoCircular.dismiss();
+            }
+        });
     }
 
-    /* ============================ Métodos e hilo reproductor ============================ */
+    /* ============================ Métodos Auxiliares ============================ */
 
     // TODO podríamos hacer que el spinner obtuviera los podcasts de un fichero de texto
     private void inicializarSpinner(){
         ArrayList<ElementoSpinner> elementosSpinner = new ArrayList<>(Arrays.asList(fuentes));
 
-        ArrayAdapter<ElementoSpinner> adaptadorSpinner = new ArrayAdapter<ElementoSpinner>(this, R.layout.support_simple_spinner_dropdown_item, elementosSpinner);
+        ArrayAdapter<ElementoSpinner> adaptadorSpinner = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, elementosSpinner);
         adaptadorSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         spinner.setAdapter(adaptadorSpinner);
     }
@@ -143,12 +147,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /* -------------------- AsyncTask -------------------- */
+    /* ============================ Hilo procesador de RSS's ============================ */
 
     /**
-     * Hilo que interpretará los datos de internet y llenará la lista
+     * Hilo que interpretará los datos del RSS y llenará la lista
      */
-    private class HiloProcesador extends AsyncTask<String,Integer,Boolean> {
+    private class HiloProcesador extends AsyncTask<String, Integer, Boolean> {
 
         /** Ejecutado antes de lanzar el hilo */
         @Override
@@ -158,16 +162,17 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Procesamos los datos de internet según el tipo de fuente.
-         * @param params viene a ser el tipo de fuente y la url
-         * @return
+         * @param params params[0] = Tipo de fuente / params[1] = url del RSS
+         * @return success
          */
         protected Boolean doInBackground(String... params) {
-            if (params[0].trim().equals("Podcast")) {
-                // Con el viejo sax: coleccionGenerica = new SaxParser1(params[1]).parse();
+            String tipoDeFuente = params[0];
+            if (tipoDeFuente.equals("Podcast")) {
+                // Con el viejo sax: coleccionGenerica = new SaxParser_deprecated(params[1]).parse();
                 SaxParser xmlParser = new SaxParser(params[1]);
                 coleccionGenerica = xmlParser.parse();
             }else
-                if(params[0].trim().equals("Lista")){
+                if(tipoDeFuente.equals("Lista")){
                     LoaderM3U m3uLoader = new LoaderM3U(params[1]);
                     coleccionGenerica = m3uLoader.getCanciones();
                 }
@@ -176,14 +181,14 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Lo que hacemos al finalizar procesamiento
-         * @param result
+         * @param result Resultado de la ejecución.
          */
         protected void onPostExecute(Boolean result) {
-
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
-            adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
+            ListViewAdapter adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
             lista.setAdapter(adaptador);
 
+            // Cerramos animación de carga
             if(progresoCircular.isShowing())
                 progresoCircular.dismiss();
         }

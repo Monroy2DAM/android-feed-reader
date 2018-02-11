@@ -3,10 +3,10 @@ package com.example.ismael.podcastplayer.modelo;
 import java.util.List;
 
 /**
- *
+ * Clase de colección de canciones.
+ * Extiende de la clase de colección genérica
  * Created by Ismael on 10/02/2018.
  */
-
 public class Canciones extends ColeccionGenerica<Cancion>{
 
     private List<Cancion> canciones;

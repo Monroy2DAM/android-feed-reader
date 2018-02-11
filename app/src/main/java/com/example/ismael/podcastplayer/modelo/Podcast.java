@@ -1,10 +1,9 @@
 package com.example.ismael.podcastplayer.modelo;
 
 /**
- * Created by Ismael on 14/01/2018.
  * Clase que define los datos de un Podcast
+ * Created by Ismael on 14/01/2018.
  */
-
 public class Podcast extends ElementoGenerico{
 
     private String imagen, titulo, urlMp3, duracion, fecha;
