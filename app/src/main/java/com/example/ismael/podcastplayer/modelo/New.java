@@ -13,6 +13,20 @@ public class New extends ElementoGenerico {
 }
 
 /*
+TODO: https://ethereumworldnews.com/feed/
+
+TODO: https://cryptovest.com/feed/
+
+TODO: https://cointelegraph.com/press-releases
+
+TODO: https://www.newsbtc.com/feed/
+
+TODO: https://www.investinblockchain.com/category/news/feed/
+
+TODO: https://bitfalls.com/feed/
+
+TODO: https://www.cryptoninjas.net/feed/
+
 TODO: Cryptopanic: https://cryptopanic.com/about/api/
 
 <item>
