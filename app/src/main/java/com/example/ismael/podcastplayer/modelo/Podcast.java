@@ -22,10 +22,12 @@ public class Podcast extends ElementoGenerico{
 
     /* -------------------- Getter & Setter -------------------- */
 
+    @Override
     public String getImagen() {
         return imagen;
     }
 
+    @Override
     public void setImagen(String imagen) { this.imagen = imagen; }
 
     @Override
@@ -33,32 +35,35 @@ public class Podcast extends ElementoGenerico{
         return titulo;
     }
 
+    @Override
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
-    public String getUrlMp3() { return urlMp3; }
+    @Override
+    public String getUrl() { return urlMp3; }
 
-    public void setUrlMp3(String urlMp3) { this.urlMp3 = urlMp3; }
+    @Override
+    public void setUrl(String urlMp3) { this.urlMp3 = urlMp3; }
 
+    @Override
     public String getDuracion() {
         return duracion;
     }
 
+    @Override
     public void setDuracion(String duracion) {
         this.duracion = duracion;
     }
 
+    @Override
     public String getFecha() {
         return fecha;
     }
 
+    @Override
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
-    @Override
-    public String getUrlStream() {
-        return getUrlMp3();
-    }
 }

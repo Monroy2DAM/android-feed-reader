@@ -8,18 +8,64 @@ public class New extends ElementoGenerico {
 
     private String titulo;
     private String url;
-    private String pubDate;
+    private String fecha;
+    private String imagen;
+    private String contenido;
 
+    /* -------------------- Constructor -------------------- */
+
+    public New() { }
+
+    public New(String titulo, String url, String fecha, String imagen, String contenido) {
+        this.titulo = titulo;
+        this.url = url;
+        this.fecha = fecha;
+        this.imagen = imagen;
+        this.contenido = contenido;
+    }
+
+    /* -------------------- Getter & Setter -------------------- */
+
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public String getTitulo() {
+        return titulo;
+    }
+
+    @Override
+    public String getDuracion() {
+        return "";
+    }
+
+    @Override
+    public String getFecha() {
+        return fecha;
+    }
+
+    @Override
+    public String getImagen() {
+        return imagen;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
 }
 
 /*
+TODO: https://geekytheory.com/feed
+
 TODO: https://ethereumworldnews.com/feed/
 
 TODO: https://cryptovest.com/feed/
 
-TODO: https://cointelegraph.com/press-releases
+TODO: https://cointelegraph.com/rss
 
-TODO: https://www.newsbtc.com/feed/
+TODO: https://www.newsbtc.com/feed/ no es xml
 
 TODO: https://www.investinblockchain.com/category/news/feed/
 

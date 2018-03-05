@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.ismael.listapodcast.R;
 import com.example.ismael.podcastplayer.adaptadores.LoaderM3U;
 import com.example.ismael.podcastplayer.adaptadores.SaxParser;
-import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
+import com.example.ismael.podcastplayer.modelo.ElementosGenerico;
 import com.example.ismael.podcastplayer.adaptadores.ListViewAdapter;
 import com.example.ismael.podcastplayer.modelo.ElementoSpinner;
 
@@ -26,10 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /*
- +======================= ANDROID PODCASTS PLAYER ======================+
+ +========================= ANDROID RSS PLAYER =========================+
+ |                                                                      |
  | Reproductor de RSS's remotos colaborativo. Podrás:                   |
  | Participar, sugerir, documentarte, solucionar errores y más en...    |
+ |                                                                      |
  | -------> https://github.com/ismenc/android-podcasts-player <-------  |
+ |                                                                      |
  +======================================================================+
  */
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinner;
 
     /* Colección de tipo genérico (podría convertirse en Canciones o Podcasts) */
-    private ColeccionGenerica coleccionGenerica;
+    private ElementosGenerico coleccionGenerica;
 
     private MediaPlayer reproduccion;
     private ProgressDialog progresoCircular;
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                reproducirNuevoStream( coleccionGenerica.get(i).getUrlStream() );
+                reproducirNuevoStream( coleccionGenerica.get(i).getUrl() );
             }
         });
 

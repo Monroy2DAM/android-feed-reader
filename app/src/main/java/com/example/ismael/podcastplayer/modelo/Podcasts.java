@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Created by Ismael on 14/01/2018.
  */
 
-public class Podcasts extends ColeccionGenerica<Podcast>{
+public class Podcasts extends ElementosGenerico<Podcast> {
 
     private ArrayList<Podcast> listaPodcasts;
 
