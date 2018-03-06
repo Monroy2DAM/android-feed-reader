@@ -75,13 +75,12 @@ public class ListViewAdapter extends BaseAdapter {
                 .resize(80, 80)
                 .into(imagen);
         titulo.setText(elemento.getTitulo());
-
-        // Aquí mostramos la información adicional si es un Podcast
-        if(elemento.getClass().getSimpleName().equals("Podcast")) {
-            // Cargamos datos en la vista
-
-            duracion.setText(((Podcast)elemento).getFecha() +"\n"+ ((Podcast)elemento).getDuracion());
+        if(elemento.getFecha() != null) {
+            duracion.setText(elemento.getFecha());
+            if(elemento.getDuracion() != null && !elemento.getDuracion().equals("+0000"))
+                duracion.append("\n"+ elemento.getDuracion());
         }
+
 
         return convertView;
     }

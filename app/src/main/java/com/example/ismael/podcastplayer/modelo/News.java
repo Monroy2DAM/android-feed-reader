@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Clase que modela la colección de noticias. Ver New.java para info de la fuente.
  * Created by Ismael on 11/02/2018.
  */
+@Deprecated
 public class News extends ElementosGenerico<New> {
     private ArrayList<New> listaNews;
 

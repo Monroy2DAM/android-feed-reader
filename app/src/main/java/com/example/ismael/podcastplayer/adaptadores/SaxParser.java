@@ -31,11 +31,11 @@ public class SaxParser {
     // ATRIBUTOS
     //==============================================================================================
     private URL rssUrl;
-    private ElementosGenerico elementos;
-    private ElementoGenerico elemento;
     private RootElement root;
     private Element channel, image, item;
     private static String urlImagen;
+    private Podcast elemento;
+    private Podcasts elementos;
 
     //==============================================================================================
     // CONSTRUCTOR
@@ -43,7 +43,7 @@ public class SaxParser {
     public SaxParser(String url) {
         try {
             this.rssUrl = new URL(url); // Se guarda la URL con el XML a analizar pasada por parámetro.
-
+            elementos = new Podcasts();
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -57,11 +57,6 @@ public class SaxParser {
      * @return devuelve un objeto Podcasts, que contiene un ArrayList de objetos Podcast.
      */
     public ElementosGenerico parse() {
-        if(true)
-            elementos = new Podcasts(); // Se crea la lista de Podcasts.
-        else
-            elementos = new News();
-
         root = new RootElement("rss"); // Se define el elemento raíz.
         channel = root.getChild("channel"); // Se define el hijo al que bajamos desde raíz.
         image = channel.getChild("image"); // Se define otro hijo al que bajamos desde "channel".
@@ -79,7 +74,7 @@ public class SaxParser {
                 new EndTextElementListener() {
                     @Override
                     public void end(String url) {
-                        urlImagen = url;
+                        urlImagen = url.trim();
                     }
                 }
         );
@@ -87,81 +82,95 @@ public class SaxParser {
         // Al comenzar un elemento "item", se crea un objeto Podcast.
         item.setStartElementListener(new StartElementListener() {
             public void start(Attributes attrs) {
-                elemento = new ElementoGenerico();
+                elemento = new Podcast();
 
                 // Se añade la imagen.
                 elemento.setImagen(urlImagen);
             }
         });
 
-        // Se añade el título del Podcast.
+        /* ============================ Básicos ============================ */
         item.getChild("title").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String titulo) {
-                        elemento.setTitulo(titulo);
+                        elemento.setTitulo(titulo.trim());
                     }
                 });
 
-        // Se añade la fecha del Podcast.
         item.getChild("pubDate").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String fecha) {
-                        elemento.setFecha(fecha);
+                        elemento.setFecha(fecha.trim());
                     }
                 });
 
-        // Se añade la duración del Podcast.
         // Nota: Como la etiqueta es "itunes:elemento", en este caso hay que especificar la URI, y luego el nombre de la etiqueta.
         item.getChild("http://www.itunes.com/dtds/elemento-1.0.dtd","duration").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String duracion) {
-                        elemento.setDuracion(duracion);
+                        elemento.setDuracion(duracion.trim());
                     }
                 });
-
-        // Se añade la URL del MP3 del Podcast.
-        item.getChild("enclosure").setStartElementListener(new StartElementListener() {
-            @Override
-            public void start(Attributes attributes) {
-                elemento.setUrl(attributes.getValue("url"));
-            }
-        });
-
-
-
-
-        item.getChild("description").setEndTextElementListener(
-                new EndTextElementListener() {
-                    public void end(String contenido) {
-                        if(elemento.getContenido().equals(ElementoGenerico.CONTENIDO_DEFECTO))
-                            elemento.setContenido(contenido);
-                    }
-        });
-
-
-        item.getChild("encoded").setEndTextElementListener(
-                new EndTextElementListener() {
-                    public void end(String contenido) {
-                        elemento.setContenido(contenido);
-                    }
-        });
-
 
         item.getChild("content").setStartElementListener(new StartElementListener() {
             @Override
             public void start(Attributes attributes) {
-                elemento.setUrl(attributes.getValue("url"));
+                elemento.setImagen(attributes.getValue("url").trim());
             }
         });
 
+        item.getChild("image").setStartElementListener(new StartElementListener() {
+            @Override
+            public void start(Attributes attributes) {
+                elemento.setImagen(attributes.getValue("http://www.itunes.com/dtds/elemento-1.0.dtd","href").trim());
+            }
+        });
 
+        /* ============================ Urls ============================ */
+        item.getChild("enclosure").setStartElementListener(new StartElementListener() {
+            @Override
+            public void start(Attributes attributes) {
+                String url = attributes.getValue("url").trim();
+                String formato = getFormato(url);
+                if(formato.equals(".jpg") || formato.equals(".png") || formato.equals(".svg") || formato.equals(".jpeg"))
+                    elemento.setImagen(url);
+                else
+                    if(elemento.getUrl() == null)
+                        elemento.setUrl(url);
+            }
+        });
+
+        item.getChild("link").setEndTextElementListener(
+            new EndTextElementListener() {
+                public void end(String url) {
+                    elemento.setUrl(url.trim());
+                }
+        });
+
+        /* ============================ Contenido ============================ */
+        item.getChild("encoded").setEndTextElementListener(
+            new EndTextElementListener() {
+                public void end(String contenido) {
+                    elemento.setContenido(contenido.trim());
+                }
+        });
+
+
+        // Contenido alternativo al contenido grande (el de arriba)
+        item.getChild("description").setEndTextElementListener(
+                new EndTextElementListener() {
+                    public void end(String contenido) {
+                        if(elemento.getContenido().equals(ElementoGenerico.CONTENIDO_DEFECTO))
+                            elemento.setContenido(contenido.trim());
+                    }
+        });
 
 
 
         // Al finalizar un elemento "item", se añade el objeto Podcast a la lista de Podcasts.
         item.setEndElementListener(new EndElementListener() {
             public void end() {
-                elementos.add((Podcast)elemento);
+                elementos.add(elemento);
             }
         });
 
@@ -183,5 +192,16 @@ public class SaxParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     * Devuelve el formato de la url (.mp3, .jpg )
+     * @param url
+     * @return
+     */
+    public static String getFormato(String url){
+        url = url.trim();
+        return url.substring(url.lastIndexOf('.'), url.length());
     }
 }

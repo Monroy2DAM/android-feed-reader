@@ -11,14 +11,13 @@ package com.example.ismael.podcastplayer.modelo;
 public class ElementoGenerico {
 
     public static String CONTENIDO_DEFECTO = "Ningún contenido para mostrar.";
-    public static String IMAGEN_DEFECTO = "https://image.flaticon.com/icons/svg/16/16268.svg";
+    public static String IMAGEN_DEFECTO = "https://www.shareicon.net/data/128x128/2016/08/18/809295_info_512x512.png";
 
     private String url, titulo, duracion, fecha, imagen, contenido;
 
     public ElementoGenerico() {
         this.imagen = IMAGEN_DEFECTO;
         this.contenido = CONTENIDO_DEFECTO;
-        this.duracion = "";
     }
 
     public ElementoGenerico(String titulo, String url, String fecha, String duracion, String contenido, String imagen) {

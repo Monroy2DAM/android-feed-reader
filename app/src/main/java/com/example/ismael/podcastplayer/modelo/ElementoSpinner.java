@@ -1,5 +1,7 @@
 package com.example.ismael.podcastplayer.modelo;
 
+import com.example.ismael.podcastplayer.adaptadores.SaxParser;
+
 /**
  * Elementos del spinner del principal. Estaría bien fusionarlo con ElementoGenerico
  * Created by Ismael on 08/02/2018.
@@ -16,8 +18,8 @@ public class ElementoSpinner {
         this.nombre = nombre;
         this.url = url;
 
-        String extension = url.substring(url.length()-3);
-        if( extension.equals("m3u") )
+        String extension = SaxParser.getFormato(url);
+        if( extension.equals(".m3u") )
             tipo = "Lista";
         else
             tipo = "Podcast";

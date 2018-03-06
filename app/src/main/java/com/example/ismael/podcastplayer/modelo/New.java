@@ -4,6 +4,7 @@ package com.example.ismael.podcastplayer.modelo;
  * Clase que modela a varios RSS de noticias. Mirar final del fichero para su estructura.
  * Created by Ismael on 11/02/2018.
  */
+@Deprecated
 public class New extends ElementoGenerico {
 
     private String titulo;

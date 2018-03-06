@@ -39,12 +39,12 @@ public class MainActivity extends AppCompatActivity {
 
     /* TODO Añadir aquí los podcasts con nombre y enlace */
     public static final ElementoSpinner[] fuentes = {
+            new ElementoSpinner("GeekyTheory", "https://geekytheory.com/feed"),
             new ElementoSpinner("Palabra de hacker", "http://www.ivoox.com/palabra-hacker_fg_f1266057_filtro_1.xml"),
             new ElementoSpinner("Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
             new ElementoSpinner("Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
             new ElementoSpinner("OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
             new ElementoSpinner("Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u"),
-            new ElementoSpinner("GeekyTheory", "https://geekytheory.com/feed"),
             new ElementoSpinner("EthereumWorldNews", "https://ethereumworldnews.com/feed/"),
             new ElementoSpinner("CryptoVest", "https://cryptovest.com/feed/"),
             new ElementoSpinner("Cointelegraph", "https://cointelegraph.com/rss"),
@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 LoaderM3U m3uLoader = new LoaderM3U(params[1]);
                 coleccionGenerica = m3uLoader.getCanciones();
             }else {
+                coleccionGenerica = null;
                 SaxParser xmlParser = new SaxParser(params[1]);
                 coleccionGenerica = xmlParser.parse();
             }
@@ -199,6 +200,8 @@ public class MainActivity extends AppCompatActivity {
             // Iniciamos y llenamos la lista tras leer y parsear el RSS
             ListViewAdapter adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
             lista.setAdapter(adaptador);
+
+            System.out.println(coleccionGenerica.get(1).getImagen() +"=========================================0");
 
             // Cerramos animación de carga
             if(progresoCircular.isShowing())
