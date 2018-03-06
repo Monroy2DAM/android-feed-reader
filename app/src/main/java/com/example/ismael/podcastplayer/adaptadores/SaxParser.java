@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.function.Function;
 
 /**
  * Clase que lee el XML y crea una lista de Podcasts.
@@ -44,6 +45,7 @@ public class SaxParser {
         try {
             this.rssUrl = new URL(url); // Se guarda la URL con el XML a analizar pasada por parámetro.
             elementos = new Podcasts();
+            urlImagen = ElementoGenerico.IMAGEN_DEFECTO;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -119,10 +121,10 @@ public class SaxParser {
             }
         });
 
-        item.getChild("image").setStartElementListener(new StartElementListener() {
+        item.getChild("http://www.itunes.com/dtds/elemento-1.0.dtd","image").setStartElementListener(new StartElementListener() {
             @Override
             public void start(Attributes attributes) {
-                elemento.setImagen(attributes.getValue("http://www.itunes.com/dtds/elemento-1.0.dtd","href").trim());
+                elemento.setImagen(attributes.getValue("href").trim());
             }
         });
 

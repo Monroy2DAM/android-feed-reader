@@ -201,8 +201,6 @@ public class MainActivity extends AppCompatActivity {
             ListViewAdapter adaptador = new ListViewAdapter(MainActivity.this, coleccionGenerica);
             lista.setAdapter(adaptador);
 
-            System.out.println(coleccionGenerica.get(1).getImagen() +"=========================================0");
-
             // Cerramos animación de carga
             if(progresoCircular.isShowing())
                 progresoCircular.dismiss();

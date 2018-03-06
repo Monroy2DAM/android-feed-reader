@@ -77,8 +77,8 @@ public class ListViewAdapter extends BaseAdapter {
         titulo.setText(elemento.getTitulo());
         if(elemento.getFecha() != null) {
             duracion.setText(elemento.getFecha());
-            if(elemento.getDuracion() != null && !elemento.getDuracion().equals("+0000"))
-                duracion.append("\n"+ elemento.getDuracion());
+            if(elemento.getDuracion() != null)
+                duracion.setText(elemento.getFecha() +", "+ elemento.getDuracion());
         }
 
 
