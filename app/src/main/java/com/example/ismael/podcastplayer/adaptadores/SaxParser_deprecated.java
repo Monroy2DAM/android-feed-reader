@@ -124,7 +124,7 @@ public class SaxParser_deprecated {
                 if (localName.equals("title")) {
                     podcastActual.setTitulo(sbTexto.toString().substring(0));
                 } else if (localName.equals("guid")) {
-                    podcastActual.setUrlMp3(sbTexto.toString().trim());
+                    podcastActual.setUrl(sbTexto.toString().trim());
                 } else if (localName.equals("duration")) {
                     podcastActual.setDuracion(sbTexto.toString().trim());
                 } else if (localName.equals("pubDate")) {

@@ -14,9 +14,10 @@ public class New extends ElementoGenerico {
 
     /* -------------------- Constructor -------------------- */
 
-    public New() { }
+    public New() { super(); }
 
     public New(String titulo, String url, String fecha, String imagen, String contenido) {
+        super();
         this.titulo = titulo;
         this.url = url;
         this.fecha = fecha;
@@ -53,6 +54,35 @@ public class New extends ElementoGenerico {
 
     public String getContenido() {
         return contenido;
+    }
+
+    @Override
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    @Override
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Override
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    @Override
+    public void setDuracion(String duracion) {
+
+    }
+
+    @Override
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
     }
 }
 

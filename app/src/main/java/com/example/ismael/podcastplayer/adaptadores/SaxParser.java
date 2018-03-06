@@ -7,6 +7,9 @@ import android.sax.RootElement;
 import android.sax.StartElementListener;
 import android.util.Xml;
 
+import com.example.ismael.podcastplayer.modelo.ElementoGenerico;
+import com.example.ismael.podcastplayer.modelo.ElementosGenerico;
+import com.example.ismael.podcastplayer.modelo.News;
 import com.example.ismael.podcastplayer.modelo.Podcast;
 import com.example.ismael.podcastplayer.modelo.Podcasts;
 
@@ -28,8 +31,8 @@ public class SaxParser {
     // ATRIBUTOS
     //==============================================================================================
     private URL rssUrl;
-    private Podcasts podcasts;
-    private Podcast podcast;
+    private ElementosGenerico elementos;
+    private ElementoGenerico elemento;
     private RootElement root;
     private Element channel, image, item;
     private static String urlImagen;
@@ -53,8 +56,11 @@ public class SaxParser {
      * Método que analiza el fichero XML.
      * @return devuelve un objeto Podcasts, que contiene un ArrayList de objetos Podcast.
      */
-    public Podcasts parse() {
-        podcasts = new Podcasts(); // Se crea la lista de Podcasts.
+    public ElementosGenerico parse() {
+        if(true)
+            elementos = new Podcasts(); // Se crea la lista de Podcasts.
+        else
+            elementos = new News();
 
         root = new RootElement("rss"); // Se define el elemento raíz.
         channel = root.getChild("channel"); // Se define el hijo al que bajamos desde raíz.
@@ -81,10 +87,10 @@ public class SaxParser {
         // Al comenzar un elemento "item", se crea un objeto Podcast.
         item.setStartElementListener(new StartElementListener() {
             public void start(Attributes attrs) {
-                podcast = new Podcast();
+                elemento = new ElementoGenerico();
 
                 // Se añade la imagen.
-                podcast.setImagen(urlImagen);
+                elemento.setImagen(urlImagen);
             }
         });
 
@@ -92,7 +98,7 @@ public class SaxParser {
         item.getChild("title").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String titulo) {
-                        podcast.setTitulo(titulo);
+                        elemento.setTitulo(titulo);
                     }
                 });
 
@@ -100,16 +106,16 @@ public class SaxParser {
         item.getChild("pubDate").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String fecha) {
-                        podcast.setFecha(fecha);
+                        elemento.setFecha(fecha);
                     }
                 });
 
         // Se añade la duración del Podcast.
-        // Nota: Como la etiqueta es "itunes:podcast", en este caso hay que especificar la URI, y luego el nombre de la etiqueta.
-        item.getChild("http://www.itunes.com/dtds/podcast-1.0.dtd","duration").setEndTextElementListener(
+        // Nota: Como la etiqueta es "itunes:elemento", en este caso hay que especificar la URI, y luego el nombre de la etiqueta.
+        item.getChild("http://www.itunes.com/dtds/elemento-1.0.dtd","duration").setEndTextElementListener(
                 new EndTextElementListener() {
                     public void end(String duracion) {
-                        podcast.setDuracion(duracion);
+                        elemento.setDuracion(duracion);
                     }
                 });
 
@@ -117,14 +123,45 @@ public class SaxParser {
         item.getChild("enclosure").setStartElementListener(new StartElementListener() {
             @Override
             public void start(Attributes attributes) {
-                podcast.setUrlMp3(attributes.getValue("url"));
+                elemento.setUrl(attributes.getValue("url"));
             }
         });
+
+
+
+
+        item.getChild("description").setEndTextElementListener(
+                new EndTextElementListener() {
+                    public void end(String contenido) {
+                        if(elemento.getContenido().equals(ElementoGenerico.CONTENIDO_DEFECTO))
+                            elemento.setContenido(contenido);
+                    }
+        });
+
+
+        item.getChild("encoded").setEndTextElementListener(
+                new EndTextElementListener() {
+                    public void end(String contenido) {
+                        elemento.setContenido(contenido);
+                    }
+        });
+
+
+        item.getChild("content").setStartElementListener(new StartElementListener() {
+            @Override
+            public void start(Attributes attributes) {
+                elemento.setUrl(attributes.getValue("url"));
+            }
+        });
+
+
+
+
 
         // Al finalizar un elemento "item", se añade el objeto Podcast a la lista de Podcasts.
         item.setEndElementListener(new EndElementListener() {
             public void end() {
-                podcasts.add(podcast);
+                elementos.add((Podcast)elemento);
             }
         });
 
@@ -137,7 +174,7 @@ public class SaxParser {
             throw new RuntimeException(e);
         }
 
-        return podcasts;
+        return elementos;
     }
 
     private InputStream getInputStream() {

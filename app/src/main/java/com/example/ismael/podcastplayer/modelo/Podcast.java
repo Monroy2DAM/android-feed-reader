@@ -10,9 +10,10 @@ public class Podcast extends ElementoGenerico{
 
     /* -------------------- Constructor -------------------- */
 
-    public Podcast() { }
+    public Podcast() { super(); }
 
     public Podcast(String imagen, String titulo, String urlMp3, String duracion, String fecha) {
+        super();
         this.imagen = imagen;
         this.titulo = titulo;
         this.urlMp3 = urlMp3;

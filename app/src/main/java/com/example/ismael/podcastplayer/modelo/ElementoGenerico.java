@@ -8,26 +8,50 @@ package com.example.ismael.podcastplayer.modelo;
  * New - noticia de blog
  * Created by Ismael on 10/02/2018.
  ***************************************************************************************************/
-public abstract class ElementoGenerico {
+public class ElementoGenerico {
 
-    public abstract String getUrl();
+    public static String CONTENIDO_DEFECTO = "Ningún contenido para mostrar.";
+    public static String IMAGEN_DEFECTO = "https://image.flaticon.com/icons/svg/16/16268.svg";
 
-    public abstract String getTitulo();
+    private String url, titulo, duracion, fecha, imagen, contenido;
 
-    public abstract String getDuracion();
+    public ElementoGenerico() {
+        this.imagen = IMAGEN_DEFECTO;
+        this.contenido = CONTENIDO_DEFECTO;
+        this.duracion = "";
+    }
 
-    public abstract String getFecha();
+    public ElementoGenerico(String titulo, String url, String fecha, String duracion, String contenido, String imagen) {
+        this.titulo = titulo;
+        this.url = url;
+        this.fecha = fecha;
+        this.imagen = imagen;
+        this.duracion = duracion;
+        this.contenido = contenido;
+    }
 
-    public abstract String getImagen();
+    public String getUrl(){ return this.url; }
 
-    public abstract void setTitulo(String titulo);
+    public String getTitulo(){ return this.titulo; }
 
-    public abstract void setUrl(String url);
+    public String getDuracion(){ return this.duracion; }
 
-    public abstract void setFecha(String fecha);
+    public String getFecha(){ return this.fecha; }
 
-    public abstract void setDuracion(String duracion);
+    public String getImagen(){ return this.imagen; }
 
-    public abstract void setImagen(String imagen);
+    public String getContenido(){ return contenido; }
+
+    public void setTitulo(String titulo){ this.titulo = titulo; }
+
+    public void setUrl(String url){ this.titulo = url; }
+
+    public void setFecha(String fecha){ this.titulo = fecha; }
+
+    public void setDuracion(String duracion){ this.titulo = duracion; }
+
+    public void setImagen(String imagen){ this.titulo = imagen; }
+
+    public void setContenido(String contenido){ this.contenido = contenido; }
 
 }

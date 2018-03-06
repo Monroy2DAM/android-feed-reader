@@ -20,10 +20,7 @@ public class ElementoSpinner {
         if( extension.equals("m3u") )
             tipo = "Lista";
         else
-            if(extension.equals("xml") || extension.equals("rss"))
-                tipo = "Podcast";
-            else
-                tipo = "Lista";
+            tipo = "Podcast";
     }
 
     public ElementoSpinner(int id, String tipo, String nombre, String url) {

@@ -43,7 +43,16 @@ public class MainActivity extends AppCompatActivity {
             new ElementoSpinner("Play Rugby", "http://fapi-top.prisasd.com/podcast/playser/play_rugby.xml"),
             new ElementoSpinner("Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
             new ElementoSpinner("OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
-            new ElementoSpinner("Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u")
+            new ElementoSpinner("Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u"),
+            new ElementoSpinner("GeekyTheory", "https://geekytheory.com/feed"),
+            new ElementoSpinner("EthereumWorldNews", "https://ethereumworldnews.com/feed/"),
+            new ElementoSpinner("CryptoVest", "https://cryptovest.com/feed/"),
+            new ElementoSpinner("Cointelegraph", "https://cointelegraph.com/rss"),
+            new ElementoSpinner("InvestInBlockchain", "https://www.investinblockchain.com/category/news/feed/"),
+            new ElementoSpinner("Bitfalls", "https://bitfalls.com/feed/"),
+            new ElementoSpinner("Cryptoninjas", "https://www.cryptoninjas.net/feed/"),
+            new ElementoSpinner("CrypotPanic", "https://cryptopanic.com/about/api/"),
+            new ElementoSpinner("InsideBitcoins", "https://insidebitcoins.com/feed")
     };
 
     private ListView lista;
@@ -170,15 +179,15 @@ public class MainActivity extends AppCompatActivity {
          */
         protected Boolean doInBackground(String... params) {
             String tipoDeFuente = params[0];
-            if (tipoDeFuente.equals("Podcast")) {
                 // Con el viejo sax: coleccionGenerica = new SaxParser_deprecated(params[1]).parse();
+
+            if(tipoDeFuente.equals("Lista")){
+                LoaderM3U m3uLoader = new LoaderM3U(params[1]);
+                coleccionGenerica = m3uLoader.getCanciones();
+            }else {
                 SaxParser xmlParser = new SaxParser(params[1]);
                 coleccionGenerica = xmlParser.parse();
-            }else
-                if(tipoDeFuente.equals("Lista")){
-                    LoaderM3U m3uLoader = new LoaderM3U(params[1]);
-                    coleccionGenerica = m3uLoader.getCanciones();
-                }
+            }
             return true;
         }
 
