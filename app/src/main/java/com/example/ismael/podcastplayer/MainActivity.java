@@ -2,6 +2,7 @@ package com.example.ismael.podcastplayer;
 
 import android.app.ProgressDialog;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 
@@ -102,6 +103,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 reproducirNuevoStream( coleccionGenerica.get(i).getUrl() );
+                Intent intent = new Intent(getApplication(), Articulo.class);
+                intent.putExtra("TITULO", coleccionGenerica.get(i).getTitulo());
+                intent.putExtra("FECHA", coleccionGenerica.get(i).getFecha());
+                intent.putExtra("CONTENIDO", coleccionGenerica.get(i).getContenido());
+                startActivity(intent);
             }
         });
 

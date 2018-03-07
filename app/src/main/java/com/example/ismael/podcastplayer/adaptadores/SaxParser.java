@@ -43,7 +43,7 @@ public class SaxParser {
     //==============================================================================================
     public SaxParser(String url) {
         try {
-            this.rssUrl = new URL(url); // Se guarda la URL con el XML a analizar pasada por parámetro.
+            this.rssUrl = new URL(url);
             elementos = new Podcasts();
             urlImagen = ElementoGenerico.IMAGEN_DEFECTO;
         } catch (MalformedURLException e) {
@@ -59,16 +59,16 @@ public class SaxParser {
      * @return devuelve un objeto Podcasts, que contiene un ArrayList de objetos Podcast.
      */
     public ElementosGenerico parse() {
-        root = new RootElement("rss"); // Se define el elemento raíz.
-        channel = root.getChild("channel"); // Se define el hijo al que bajamos desde raíz.
-        image = channel.getChild("image"); // Se define otro hijo al que bajamos desde "channel".
-        item = channel.getChild("item"); // Se define otro hijo al que bajamos desde "channel".
+        // Elementos del XML
+        root = new RootElement("rss");
+        channel = root.getChild("channel");
+        image = channel.getChild("image");
+        item = channel.getChild("item");
 
         /**
          * FIXME Para los Podcasts de CadenaSer y OndaCero las imágenes vienen como:
          * <itunes:image href="https://recursosweb.prisaradio.com/logos/cadenaser-logo_01.png"/>
          * itunes:image + atributo de la etiqueta
-         * ¿Cómo podríamos capturar todos los casos de XML?
          */
 
         // Se obtiene la url de la imagen.
