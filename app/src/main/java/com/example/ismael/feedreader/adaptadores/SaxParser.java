@@ -1,12 +1,12 @@
-package com.example.ismael.podcastplayer.adaptadores;
+package com.example.ismael.feedreader.adaptadores;
 
 import android.sax.Element;
 import android.sax.RootElement;
 import android.util.Xml;
 
-import com.example.ismael.podcastplayer.modelo.ElementoXML;
-import com.example.ismael.podcastplayer.modelo.ColeccionAbstracta;
-import com.example.ismael.podcastplayer.modelo.Podcasts;
+import com.example.ismael.feedreader.modelo.ElementoXML;
+import com.example.ismael.feedreader.modelo.ColeccionAbstracta;
+import com.example.ismael.feedreader.modelo.Podcasts;
 
 import java.io.IOException;
 import java.io.InputStream;

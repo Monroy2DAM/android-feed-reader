@@ -1,7 +1,7 @@
-package com.example.ismael.podcastplayer.adaptadores;
+package com.example.ismael.feedreader.adaptadores;
 
-import com.example.ismael.podcastplayer.modelo.ElementoXML;
-import com.example.ismael.podcastplayer.modelo.Podcasts;
+import com.example.ismael.feedreader.modelo.ElementoXML;
+import com.example.ismael.feedreader.modelo.Podcasts;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;

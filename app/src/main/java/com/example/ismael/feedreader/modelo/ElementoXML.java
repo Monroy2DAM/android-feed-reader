@@ -1,9 +1,9 @@
-package com.example.ismael.podcastplayer.modelo;
+package com.example.ismael.feedreader.modelo;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
 
 /***************************************************************************************************
@@ -61,8 +61,9 @@ public class ElementoXML {
         try {
             // Tue, 20 Feb 2018 07:57:55 +0000
             DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.ENGLISH);
-            Date result =  df.parse(fecha);
-            fechaParseada = result.getDay() + "/" + result.getMonth() + "/" + result.getYear();
+            Calendar c = Calendar.getInstance();
+            c.setTime(df.parse(fecha));
+            fechaParseada = c.get(Calendar.DAY_OF_WEEK_IN_MONTH) + "/" + c.get(Calendar.MONTH) + "/" + c.get(Calendar.YEAR);
         } catch (ParseException e) {
             fechaParseada = fecha;
         }catch(NullPointerException e){

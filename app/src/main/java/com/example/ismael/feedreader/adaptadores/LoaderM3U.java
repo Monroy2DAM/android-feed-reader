@@ -1,7 +1,7 @@
-package com.example.ismael.podcastplayer.adaptadores;
+package com.example.ismael.feedreader.adaptadores;
 
-import com.example.ismael.podcastplayer.modelo.Cancion;
-import com.example.ismael.podcastplayer.modelo.Canciones;
+import com.example.ismael.feedreader.modelo.Cancion;
+import com.example.ismael.feedreader.modelo.Canciones;
 
 import java.io.BufferedReader;
 import java.io.IOException;

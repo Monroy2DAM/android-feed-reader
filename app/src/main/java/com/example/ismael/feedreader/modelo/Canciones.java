@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer.modelo;
+package com.example.ismael.feedreader.modelo;
 
 import java.util.List;
 

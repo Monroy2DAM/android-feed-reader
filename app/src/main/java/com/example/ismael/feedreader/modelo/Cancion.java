@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer.modelo;
+package com.example.ismael.feedreader.modelo;
 
 /**
  * Created by Ismael on 21/01/18.

@@ -1,6 +1,6 @@
-package com.example.ismael.podcastplayer.modelo;
+package com.example.ismael.feedreader.modelo;
 
-import com.example.ismael.podcastplayer.adaptadores.SaxParser;
+import com.example.ismael.feedreader.adaptadores.SaxParser;
 
 /**
  * Elementos del spinner del principal. Estaría bien fusionarlo con ElementoXML
