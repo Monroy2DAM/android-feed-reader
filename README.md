@@ -5,11 +5,11 @@ Aplicación ***Android*** que lee, muestra y reproduce listas *m3u*, *RSS de blo
 Implementa funcionalidades para **leer y reproducir** los recursos que contienen dichos feeds.
 
 <p align="center">
-<img src="doc/1.png" alt="">
-<img src="doc/2.png" alt="">
-<img src="doc/3.png" alt="">
-<img src="doc/4.png" alt="">
-<img src="doc/5.png" alt="">
+<img src="doc/1.png" width="220" alt="">
+<img src="doc/2.png" width="220" alt="">
+<img src="doc/3.png" width="220" alt="">
+<img src="doc/4.png" width="220" alt="">
+<img src="doc/5.png" width="220" alt="">
 </p>
 
 - - - -
@@ -52,6 +52,7 @@ Implementa funcionalidades para **leer y reproducir** los recursos que contienen
   * [1. Funcionamiento](#1-funcionamiento-de-la-aplicación)
   * [2. Documentación](#2-documentación)
   * [3. Fallos conocidos](#3-fallos-conocidos)
+  * [4. Colaboradores](#3-Colaboradores)
 
 - - - -
 <br>
@@ -70,13 +71,16 @@ Implementa funcionalidades para **leer y reproducir** los recursos que contienen
 El proyecto se estructura en varios paquetes:
 
 [:open_file_folder: feedreader/](app/src/main/java/com/example/ismael/feedreader/)
-  > Paquete con las *activities* e *hilos*.
+
+   > Paquete con las *activities* e *hilos*.
 
 [:open_file_folder: feedreader/adaptadores/](app/src/main/java/com/example/ismael/feedreader/adaptadores/)
-  > Paquete con parseadores y adaptadores de pantalla y datos.
+
+   > Paquete con parseadores y adaptadores de pantalla y datos.
 
 [:open_file_folder: feedreader/modelo/](app/src/main/java/com/example/ismael/feedreader/modelo/)
-  > Paquete con las clases modelo de los objetos empleados.
+
+   > Paquete con las clases modelo de los objetos empleados.
 
 * Se ha empleado un buen estilo de programación para que el código sea **legible y escalable**:
   * Uso de comentarios explicativos y todo/fixme.
@@ -103,4 +107,11 @@ Las siguientes opciones pueden solucionarlo:
 
 Posible solución:
 
-> File -> Project structure... -> Project -> Cambia JDK location al directorio de instalación de Java JDK
+   > File -> Project structure... -> Project -> Cambia JDK location al directorio de instalación de Java JDK
+   
+## 4. Colaboradores
+
+Colaborador | Aporte
+------------ | ------------
+[Ismael Núñez](https://github.com/ismenc) | Mayoría de la app
+[Francisco Rodríguez](https://github.com/KerosenoDev) | SaxParser
