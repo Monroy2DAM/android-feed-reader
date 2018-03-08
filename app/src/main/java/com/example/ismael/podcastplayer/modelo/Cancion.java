@@ -3,7 +3,7 @@ package com.example.ismael.podcastplayer.modelo;
 /**
  * Created by Ismael on 21/01/18.
  */
-public class Cancion extends ElementoGenerico{
+public class Cancion extends ElementoXML {
     String urlStream;
     String titulo;
 
@@ -24,7 +24,7 @@ public class Cancion extends ElementoGenerico{
     }
 
     @Override
-    public String getUrl() {
+    public String getRecurso() {
         return urlStream;
     }
 
@@ -54,8 +54,8 @@ public class Cancion extends ElementoGenerico{
     }
 
     @Override
-    public void setUrl(String url) {
-        this.urlStream = url;
+    public void setRecurso(String recurso) {
+        this.urlStream = recurso;
     }
 
     @Override

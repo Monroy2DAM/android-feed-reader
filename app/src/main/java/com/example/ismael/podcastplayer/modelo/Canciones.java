@@ -7,7 +7,7 @@ import java.util.List;
  * Extiende de la clase de colección genérica
  * Created by Ismael on 10/02/2018.
  */
-public class Canciones extends ElementosGenerico<Cancion> {
+public class Canciones extends ColeccionAbstracta<Cancion> {
 
     private List<Cancion> canciones;
 

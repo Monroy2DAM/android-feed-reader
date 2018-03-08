@@ -1,6 +1,6 @@
 package com.example.ismael.podcastplayer.adaptadores;
 
-import com.example.ismael.podcastplayer.modelo.Podcast;
+import com.example.ismael.podcastplayer.modelo.ElementoXML;
 import com.example.ismael.podcastplayer.modelo.Podcasts;
 
 import org.xml.sax.Attributes;
@@ -83,11 +83,11 @@ public class SaxParser_deprecated {
     @Deprecated
     public class SaxHandler extends DefaultHandler {
 
-        private ArrayList<Podcast> listaPodcasts;
-        private Podcast podcastActual;
+        private ArrayList<ElementoXML> listaPodcasts;
+        private ElementoXML podcastActual;
         private StringBuilder sbTexto;
 
-        public ArrayList<Podcast> getListaPodcasts(){
+        public ArrayList<ElementoXML> getListaPodcasts(){
             return listaPodcasts;
         }
 
@@ -124,7 +124,7 @@ public class SaxParser_deprecated {
                 if (localName.equals("title")) {
                     podcastActual.setTitulo(sbTexto.toString().substring(0));
                 } else if (localName.equals("guid")) {
-                    podcastActual.setUrl(sbTexto.toString().trim());
+                    podcastActual.setRecurso(sbTexto.toString().trim());
                 } else if (localName.equals("duration")) {
                     podcastActual.setDuracion(sbTexto.toString().trim());
                 } else if (localName.equals("pubDate")) {
@@ -147,7 +147,7 @@ public class SaxParser_deprecated {
             super.startDocument();
 
             // Iniciamos variables
-            listaPodcasts = new ArrayList<Podcast>();
+            listaPodcasts = new ArrayList<ElementoXML>();
             sbTexto = new StringBuilder();
         }
 
@@ -161,7 +161,7 @@ public class SaxParser_deprecated {
 
             // Creamos nuevo podcast vacío al inicio de un <item>
             if (localName.equals("item"))
-                podcastActual = new Podcast();
+                podcastActual = new ElementoXML();
 
             // Ponemos la imagen. Viene como un atributo :
             // <itunes:image href="https://recursosweb.prisaradio.com/logos/cadenaser-logo_01.png"/>

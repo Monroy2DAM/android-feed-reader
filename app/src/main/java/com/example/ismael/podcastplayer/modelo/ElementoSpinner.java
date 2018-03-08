@@ -3,13 +3,13 @@ package com.example.ismael.podcastplayer.modelo;
 import com.example.ismael.podcastplayer.adaptadores.SaxParser;
 
 /**
- * Elementos del spinner del principal. Estaría bien fusionarlo con ElementoGenerico
+ * Elementos del spinner del principal. Estaría bien fusionarlo con ElementoXML
  * Created by Ismael on 08/02/2018.
  */
 public class ElementoSpinner {
 
     private int id;
-    /* Usado por el AsyncTask para saber si es Podcast o Cancion */
+    /* Usado por el AsyncTask para saber si es elemento o Cancion */
     private String tipo;
     private String nombre;
     private String url;
@@ -22,7 +22,7 @@ public class ElementoSpinner {
         if( extension.equals(".m3u") )
             tipo = "Lista";
         else
-            tipo = "Podcast";
+            tipo = "Otro";
     }
 
     public ElementoSpinner(int id, String tipo, String nombre, String url) {
