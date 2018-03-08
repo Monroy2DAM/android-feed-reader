@@ -1,55 +1,75 @@
 package com.example.ismael.podcastplayer.modelo;
 
 /**
- * Created by srk on 21/01/18.
+ * Created by Ismael on 21/01/18.
  */
-public class Cancion extends ElementoGenerico{
-    String direccionCancion;
-    String tituloCancion;
+public class Cancion extends ElementoXML {
+    String urlStream;
+    String titulo;
 
-    public Cancion(){}
+    public Cancion(){ super(); }
 
-    public Cancion(String direccionCancion, String tituloCancion) {
-        this.direccionCancion = direccionCancion;
-        this.tituloCancion = tituloCancion;
-    }
-
-    public
-    String getDireccionCancion() {
-        return direccionCancion;
-    }
-
-    public
-    void setDireccionCancion(String direccionCancion) {
-        this.direccionCancion = direccionCancion;
-    }
-
-    public
-    String getTituloCancion() {
-        return tituloCancion;
-    }
-
-    public
-    void setTituloCancion(String tituloCancion) {
-        this.tituloCancion = tituloCancion;
+    public Cancion(String urlStream, String titulo) {
+        super();
+        this.urlStream = urlStream;
+        this.titulo = titulo;
     }
 
     @Override
-    public
-    String toString() {
+    public String toString() {
         return "Cancion{" +
-                "direccionCancion='" + direccionCancion + '\'' +
-                ", tituloCancion='" + tituloCancion + '\'' +
+                "urlStream='" + urlStream + '\'' +
+                ", titulo='" + titulo + '\'' +
                 '}';
     }
 
     @Override
-    public String getUrlStream() {
-        return direccionCancion;
+    public String getRecurso() {
+        return urlStream;
     }
 
     @Override
     public String getTitulo() {
-        return tituloCancion;
+        return titulo;
+    }
+
+    @Override
+    public String getDuracion() {
+        return "";
+    }
+
+    @Override
+    public String getFecha() {
+        return "";
+    }
+
+    @Override
+    public String getImagen() {
+        return "https://dl2.macupdate.com/images/icons256/52415.png?d=1513200110";
+    }
+
+    @Override
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    @Override
+    public void setRecurso(String recurso) {
+        this.urlStream = recurso;
+    }
+
+    @Override
+    public void setFecha(String fecha) {
+
+    }
+
+    @Override
+    public void setDuracion(String duracion) {
+
+    }
+
+    @Override
+    public void setImagen(String imagen) {
+
     }
 }

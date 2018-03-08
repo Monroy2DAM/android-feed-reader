@@ -7,15 +7,15 @@ import java.util.ArrayList;
  * Created by Ismael on 14/01/2018.
  */
 
-public class Podcasts extends ColeccionGenerica<Podcast>{
+public class Podcasts extends ColeccionAbstracta<ElementoXML> {
 
-    private ArrayList<Podcast> listaPodcasts;
+    private ArrayList<ElementoXML> listaPodcasts;
 
     /* -------------------- Constructor -------------------- */
 
-    public Podcasts(){ listaPodcasts = new ArrayList<Podcast>(); }
+    public Podcasts(){ listaPodcasts = new ArrayList<ElementoXML>(); }
 
-    public Podcasts(ArrayList<Podcast> listaPodcasts) {
+    public Podcasts(ArrayList<ElementoXML> listaPodcasts) {
         this.listaPodcasts = listaPodcasts;
     }
 
@@ -23,12 +23,12 @@ public class Podcasts extends ColeccionGenerica<Podcast>{
 
     @Override
     public <T> void add(T podcast){
-        listaPodcasts.add((Podcast)podcast);
+        listaPodcasts.add((ElementoXML)podcast);
     }
 
     @Override
-    public Podcast get(int index){
-        return (Podcast) listaPodcasts.get(index);
+    public ElementoXML get(int index){
+        return (ElementoXML) listaPodcasts.get(index);
     }
 
     @Override

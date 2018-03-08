@@ -1,16 +1,12 @@
 package com.example.ismael.podcastplayer.adaptadores;
 
 import android.sax.Element;
-import android.sax.EndElementListener;
-import android.sax.EndTextElementListener;
 import android.sax.RootElement;
-import android.sax.StartElementListener;
 import android.util.Xml;
 
-import com.example.ismael.podcastplayer.modelo.Podcast;
+import com.example.ismael.podcastplayer.modelo.ElementoXML;
+import com.example.ismael.podcastplayer.modelo.ColeccionAbstracta;
 import com.example.ismael.podcastplayer.modelo.Podcasts;
-
-import org.xml.sax.Attributes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,25 +18,26 @@ import java.net.URL;
  * @author Francisco Rodríguez García
  */
 public class SaxParser {
-    // TODO mira el FIXME de más abajo para indicaciones de fallos de la aplicacion
+    // FIXME de más abajo para indicaciones de fallos de la aplicacion
 
     //==============================================================================================
     // ATRIBUTOS
     //==============================================================================================
     private URL rssUrl;
-    private Podcasts podcasts;
-    private Podcast podcast;
     private RootElement root;
     private Element channel, image, item;
     private static String urlImagen;
+    private ElementoXML elemento;
+    private Podcasts elementos;
 
     //==============================================================================================
     // CONSTRUCTOR
     //==============================================================================================
     public SaxParser(String url) {
         try {
-            this.rssUrl = new URL(url); // Se guarda la URL con el XML a analizar pasada por parámetro.
-
+            this.rssUrl = new URL(url);
+            elementos = new Podcasts();
+            urlImagen = ElementoXML.IMAGEN_DEFECTO;
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         }
@@ -51,82 +48,79 @@ public class SaxParser {
     //==============================================================================================
     /**
      * Método que analiza el fichero XML.
-     * @return devuelve un objeto Podcasts, que contiene un ArrayList de objetos Podcast.
+     * @return devuelve un objeto Elementos, que contiene un ArrayList de objetos Elemento.
      */
-    public Podcasts parse() {
-        podcasts = new Podcasts(); // Se crea la lista de Podcasts.
+    public ColeccionAbstracta parse() {
+        // Elementos del XML
+        root = new RootElement("rss");
+        channel = root.getChild("channel");
+        image = channel.getChild("image");
+        item = channel.getChild("item");
 
-        root = new RootElement("rss"); // Se define el elemento raíz.
-        channel = root.getChild("channel"); // Se define el hijo al que bajamos desde raíz.
-        image = channel.getChild("image"); // Se define otro hijo al que bajamos desde "channel".
-        item = channel.getChild("item"); // Se define otro hijo al que bajamos desde "channel".
+        // Obtiene url de la imagen
+        image.getChild("url").setEndTextElementListener(url -> urlImagen = url.trim() );
 
-        /**
-         * FIXME Para los Podcasts de CadenaSer y OndaCero las imágenes vienen como:
-         * <itunes:image href="https://recursosweb.prisaradio.com/logos/cadenaser-logo_01.png"/>
-         * itunes:image + atributo de la etiqueta
-         * ¿Cómo podríamos capturar todos los casos de XML?
-         */
+        // Al comenzar un item
+        item.setStartElementListener(atributos -> {
+            elemento = new ElementoXML();
+            elemento.setImagen(urlImagen);
+        });
 
-        // Se obtiene la url de la imagen.
-        image.getChild("url").setEndTextElementListener(
-                new EndTextElementListener() {
-                    @Override
-                    public void end(String url) {
-                        urlImagen = url;
-                    }
-                }
-        );
+        /* ============================ Básicos ============================ */
+        item.getChild("title").setEndTextElementListener(titulo -> elemento.setTitulo(titulo.trim()));
 
-        // Al comenzar un elemento "item", se crea un objeto Podcast.
-        item.setStartElementListener(new StartElementListener() {
-            public void start(Attributes attrs) {
-                podcast = new Podcast();
+        item.getChild("pubDate").setEndTextElementListener(fecha -> elemento.setFecha(fecha.trim()));
 
-                // Se añade la imagen.
-                podcast.setImagen(urlImagen);
+        item.getChild("description").setEndTextElementListener(descripcion -> elemento.setDescripcion(descripcion.trim()) );
+
+        item.getChild("encoded").setEndTextElementListener(contenido -> elemento.setContenido(contenido.trim()) );
+
+        // Fixme esto no está funcionando
+
+        item.getChild("http://www.itunes.com/dtds/elemento-1.0.dtd","duration")
+                .setEndTextElementListener(duracion -> elemento.setDuracion(duracion.trim()));
+
+        item.getChild("http://www.itunes.com/dtds/elemento-1.0.dtd","image")
+                .setStartElementListener(attributes -> elemento.setImagen(attributes.getValue("href").trim() ));
+
+        /* ============================ Urls ============================ */
+        item.getChild("enclosure").setStartElementListener(attributes -> {
+                String url = attributes.getValue("url").trim();
+                String formato = getFormato(url);
+                if(formato.equals(".jpg") || formato.equals(".png") || formato.equals(".jpeg"))
+                    elemento.setImagen(url);
+                else
+                    if(formato.equals(".mp3") || formato.equals(".ogg") || formato.equals(".wav"))
+                        elemento.setRecurso(url);
+            });
+
+        item.getChild("link").setEndTextElementListener(url -> {
+            String formato = getFormato(url.trim());
+            if(formato.equals(".mp3") || formato.equals(".ogg") || formato.equals(".wav"))
+                elemento.setRecurso(url.trim());
+            else {
+                if (formato.equals(".jpg") || formato.equals(".png") || formato.equals(".jpeg"))
+                    elemento.setImagen(url);
+                else
+                    elemento.setLink(url.trim());
             }
         });
 
-        // Se añade el título del Podcast.
-        item.getChild("title").setEndTextElementListener(
-                new EndTextElementListener() {
-                    public void end(String titulo) {
-                        podcast.setTitulo(titulo);
-                    }
-                });
-
-        // Se añade la fecha del Podcast.
-        item.getChild("pubDate").setEndTextElementListener(
-                new EndTextElementListener() {
-                    public void end(String fecha) {
-                        podcast.setFecha(fecha);
-                    }
-                });
-
-        // Se añade la duración del Podcast.
-        // Nota: Como la etiqueta es "itunes:podcast", en este caso hay que especificar la URI, y luego el nombre de la etiqueta.
-        item.getChild("http://www.itunes.com/dtds/podcast-1.0.dtd","duration").setEndTextElementListener(
-                new EndTextElementListener() {
-                    public void end(String duracion) {
-                        podcast.setDuracion(duracion);
-                    }
-                });
-
-        // Se añade la URL del MP3 del Podcast.
-        item.getChild("enclosure").setStartElementListener(new StartElementListener() {
-            @Override
-            public void start(Attributes attributes) {
-                podcast.setUrlMp3(attributes.getValue("url"));
-            }
+        item.getChild("guid").setEndTextElementListener(url -> {
+            String formato = getFormato(url.trim());
+            if(formato.equals(".mp3") || formato.equals(".ogg") || formato.equals(".wav"))
+                elemento.setRecurso(url.trim());
+            else
+                elemento.setLink(url.trim());
         });
 
-        // Al finalizar un elemento "item", se añade el objeto Podcast a la lista de Podcasts.
-        item.setEndElementListener(new EndElementListener() {
-            public void end() {
-                podcasts.add(podcast);
-            }
-        });
+        // De aquí que se coge? en que podcast aparece?
+        item.getChild("content").setStartElementListener(attributes -> elemento.setImagen(attributes.getValue("url").trim()) );
+
+
+
+
+        item.setEndElementListener(() -> elementos.add(elemento) );
 
         try {
             Xml.parse(this.getInputStream(),
@@ -137,7 +131,7 @@ public class SaxParser {
             throw new RuntimeException(e);
         }
 
-        return podcasts;
+        return elementos;
     }
 
     private InputStream getInputStream() {
@@ -146,5 +140,16 @@ public class SaxParser {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    /**
+     * Método que devuelve el formato de la url (.mp3, .jpg )
+     * @param url
+     * @return
+     */
+    public static String getFormato(String url){
+        url = url.trim();
+        return url.substring(url.lastIndexOf('.'), url.length());
     }
 }

@@ -9,9 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ismael.listapodcast.R;
-import com.example.ismael.podcastplayer.modelo.ColeccionGenerica;
-import com.example.ismael.podcastplayer.modelo.ElementoGenerico;
-import com.example.ismael.podcastplayer.modelo.Podcast;
+import com.example.ismael.podcastplayer.modelo.ColeccionAbstracta;
+import com.example.ismael.podcastplayer.modelo.ElementoXML;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -23,14 +22,14 @@ public class ListViewAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private Context context;
 
-    private ColeccionGenerica coleccion;
+    private ColeccionAbstracta coleccion;
 
     private TextView titulo, duracion, fecha;
     private ImageView imagen;
 
     /* -------------------- Constructor -------------------- */
 
-    public ListViewAdapter(Context context, ColeccionGenerica coleccion) {
+    public ListViewAdapter(Context context, ColeccionAbstracta coleccion) {
         this.inflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
@@ -58,7 +57,7 @@ public class ListViewAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Cogemos el podcast actual
-        ElementoGenerico elemento = coleccion.get(position);
+        ElementoXML elemento = coleccion.get(position);
 
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.elemento_lista, null);
@@ -68,21 +67,20 @@ public class ListViewAdapter extends BaseAdapter {
         imagen = convertView.findViewById(R.id.imagen);
         titulo = convertView.findViewById(R.id.titulo);
         duracion = convertView.findViewById(R.id.duracion);
-        fecha = convertView.findViewById(R.id.fecha);
 
         // Aquí mostramos los parámetros generales
+        Picasso.with(context)
+                .load(elemento.getImagen())
+                .resize(100, 100)
+                .centerInside()
+                .into(imagen);
         titulo.setText(elemento.getTitulo());
-
-        // Aquí mostramos la información adicional si es un Podcast
-        if(elemento.getClass().getSimpleName().equals("Podcast")) {
-            // Cargamos datos en la vista
-            Picasso.with(context)
-                    .load(((Podcast)elemento).getImagen())
-                    .resize(80, 80)
-                    .into(imagen);
-            duracion.setText(((Podcast)elemento).getDuracion());
-            fecha.setText(((Podcast)elemento).getFecha());
+        if(elemento.getFecha() != null) {
+            duracion.setText(elemento.getFecha());
+            if(elemento.getDuracion() != null)
+                duracion.setText(elemento.getFecha() +", "+ elemento.getDuracion());
         }
+
 
         return convertView;
     }
