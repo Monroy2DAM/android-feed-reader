@@ -1,14 +1,14 @@
-package com.example.ismael.podcastplayer;
+package com.example.ismael.feedreader;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
-import com.example.ismael.podcastplayer.adaptadores.ListViewAdapter;
-import com.example.ismael.podcastplayer.adaptadores.LoaderM3U;
-import com.example.ismael.podcastplayer.adaptadores.SaxParser;
-import com.example.ismael.podcastplayer.modelo.ColeccionAbstracta;
+import com.example.ismael.feedreader.adaptadores.ListViewAdapter;
+import com.example.ismael.feedreader.adaptadores.LoaderM3U;
+import com.example.ismael.feedreader.adaptadores.SaxParser;
+import com.example.ismael.feedreader.modelo.ColeccionAbstracta;
 
 /**
  * Hilo que interpretará los datos del RSS y llenará la lista

@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer.adaptadores;
+package com.example.ismael.feedreader.adaptadores;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ismael.listapodcast.R;
-import com.example.ismael.podcastplayer.modelo.ColeccionAbstracta;
-import com.example.ismael.podcastplayer.modelo.ElementoXML;
+import com.example.ismael.feedreader.modelo.ColeccionAbstracta;
+import com.example.ismael.feedreader.modelo.ElementoXML;
 import com.squareup.picasso.Picasso;
 
 /**

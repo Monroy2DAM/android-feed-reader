@@ -1,4 +1,4 @@
-package com.example.ismael.podcastplayer;
+package com.example.ismael.feedreader;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -20,7 +20,7 @@ import java.io.IOException;
  * Intent encargado de mostrar información detallada del elemento seleccionado
  * @author Ismael
  */
-public class Articulo extends AppCompatActivity {
+public class Detalle extends AppCompatActivity {
 
     private MediaPlayer reproduccion;
     private String audio, link;
