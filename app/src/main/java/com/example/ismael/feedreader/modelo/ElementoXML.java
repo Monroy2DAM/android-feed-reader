@@ -60,12 +60,12 @@ public class ElementoXML {
         String fechaParseada = null;
         try {
             // Tue, 20 Feb 2018 07:57:55 +0000
-            DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.ENGLISH);
+            DateFormat df = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss z", Locale.FRANCE);
             Calendar c = Calendar.getInstance();
             c.setTime(df.parse(fecha));
             fechaParseada = c.get(Calendar.DAY_OF_WEEK_IN_MONTH) + "/" + c.get(Calendar.MONTH) + "/" + c.get(Calendar.YEAR);
         } catch (ParseException e) {
-            fechaParseada = fecha;
+            fechaParseada = fecha.substring(4, fecha.length()-15);
         }catch(NullPointerException e){
             fechaParseada = "(?)";
         }

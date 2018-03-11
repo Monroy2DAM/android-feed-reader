@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             new ElementoSpinner("Palabra de hacker", "http://www.ivoox.com/palabra-hacker_fg_f1266057_filtro_1.xml"),
             new ElementoSpinner("Play Rugby", "http://cadenaser.com/programa/rss/play_rugby/"),
             new ElementoSpinner("Oh My LOL", "https://recursosweb.prisaradio.com/podcasts/571.xml"),
-            new ElementoSpinner("OC: El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
+            new ElementoSpinner("El transistor", "http://www.ondacero.es/rss/podcast/644375/podcast.xml"),
             new ElementoSpinner("Canciones Orlando", "http://practicascursodam.esy.es/musica/milista.m3u"),
             new ElementoSpinner("EthereumWorldNews", "https://ethereumworldnews.com/feed/"),
             new ElementoSpinner("CryptoVest", "https://cryptovest.com/feed/"),

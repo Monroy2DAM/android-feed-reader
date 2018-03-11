@@ -22,7 +22,7 @@ public class ElementoSpinner {
         if( extension.equals(".m3u") )
             tipo = "Lista";
         else
-            tipo = "Otro";
+            tipo = "RSS";
     }
 
     public ElementoSpinner(int id, String tipo, String nombre, String url) {
