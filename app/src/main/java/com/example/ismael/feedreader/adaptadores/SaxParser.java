@@ -111,7 +111,8 @@ public class SaxParser {
             if(formato.equals(".mp3") || formato.equals(".ogg") || formato.equals(".wav"))
                 elemento.setRecurso(url.trim());
             else
-                elemento.setLink(url.trim());
+                if(elemento.getLink().equals(""))
+                    elemento.setLink(url.trim());
         });
 
         // De aquí que se coge? en que podcast aparece?
@@ -150,6 +151,10 @@ public class SaxParser {
      */
     public static String getFormato(String url){
         url = url.trim();
-        return url.substring(url.lastIndexOf('.'), url.length());
+        try {
+            return url.substring(url.lastIndexOf('.'), url.length());
+        }catch (StringIndexOutOfBoundsException e){
+            return "nada";
+        }
     }
 }
